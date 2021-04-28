@@ -1,0 +1,28 @@
+{
+  "name": "pokemon-data-scraper",
+  "version": "1.0.0",
+  "description": "scraper for pokémon data",
+  "main": "dist/pokemonDataScraper.js",
+  "repository": "https://github.com/MasterKenth/pokemon-data-scraper.git",
+  "author": "Master Kenth",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc && node dist/pokemonDataScraper.js",
+    "fix": "eslint --fix *.ts *.json \"src/**/*.ts\" \"src/**/*.json\" --no-error-on-unmatched-pattern && prettier --write *.ts *.json \"src/**/*.ts\" \"src/**/*.json\""
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "commitizen": "^4.2.3",
+    "cz-conventional-changelog": "3.3.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
