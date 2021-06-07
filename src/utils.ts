@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import fs, { promises as fsp } from "fs";
 import axios from "axios";
 
 export default {
@@ -160,10 +160,10 @@ export default {
   ): Promise<string> {
     let html;
     try {
-      return await fs.readFile(cachePath, { encoding: "utf-8" });
+      return await fsp.readFile(cachePath, { encoding: "utf-8" });
     } catch (e) {
       html = await axios(url).then((res) => res.data);
-      await fs.writeFile(cachePath, html);
+      await fsp.writeFile(cachePath, html);
       return html;
     }
   },
@@ -175,11 +175,10 @@ export default {
    */
   fetchBlob: async function (url: string, cachePath: string): Promise<void> {
     try {
-      await fs.access(cachePath);
+      await fsp.access(cachePath);
     } catch (e) {
-      await axios({ url, method: "GET", responseType: "stream" }).then((res) =>
-        fs.writeFile(cachePath, res.data)
-      );
+      const res = await axios({ url, method: "GET", responseType: "stream" });
+      res.data.pipe(fs.createWriteStream(cachePath));
     }
   },
 };
