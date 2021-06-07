@@ -468,7 +468,7 @@ async function scrapeMove(
     if (returnData) {
       return JSON.parse(await fs.readFile(jsonCachePath, "utf-8"));
     } else {
-      fs.stat(jsonCachePath);
+      await fs.stat(jsonCachePath);
     }
   } catch (error) {
     console.log(
