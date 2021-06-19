@@ -172,13 +172,16 @@ export default {
    * Downloads url as blob to cachePath if not already downloaded. Can be used to cache images etc.
    * @param url url to download
    * @param cachePath file path to cache for this blob
+   * @returns Blob Buffer object of the resource to fetch.
    */
-  fetchBlob: async function (url: string, cachePath: string): Promise<void> {
+  fetchBlob: async function (url: string, cachePath: string): Promise<Buffer> {
     try {
-      await fsp.access(cachePath);
+      return await fsp.readFile(cachePath);
     } catch (e) {
       const res = await axios({ url, method: "GET", responseType: "stream" });
       res.data.pipe(fs.createWriteStream(cachePath));
+      await new Promise((resolve) => res.data.on("close", resolve));
+      return await fsp.readFile(cachePath);
     }
   },
 };
