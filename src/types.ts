@@ -122,6 +122,11 @@ export interface PokemonInfo {
    */
   moves: PokemonMoves;
 
+  /**
+   * Base64-encoded image of this Pokémon.
+   */
+  imageData: string;
+
   // not yet implemented
   //abilities?: null;
   //hiddenAbility?: null;

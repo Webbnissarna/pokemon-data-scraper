@@ -130,16 +130,14 @@ async function scrapePokemon(
   );
 
   const imageCachePath = path.join(
-    ScrapePaths.CACHEDIR_DATA_POKEMON,
+    ScrapePaths.CACHEDIR_HTML_POKEMON,
     `${pokemonInfo.no}.png`
   );
 
   try {
-    await fs.stat(imageCachePath);
+    await fs.stat(outCachePath);
     if (returnData) {
       return JSON.parse(await fs.readFile(outCachePath, "utf-8"));
-    } else {
-      await fs.stat(outCachePath);
     }
   } catch (error) {
     console.log(`Scraping ${pokemonInfo.no} ${pokemonInfo.name}...`);
@@ -205,6 +203,17 @@ async function scrapePokemon(
         "table"
       )?.querySelector("table.sortable");
     }
+
+    const imageUrl = `https://bulbapedia.bulbagarden.net/${
+      (<HTMLAnchorElement>(
+        infoTableDom?.querySelector('td[colspan="4"] img')?.parentElement
+      ))?.href
+    }`;
+
+    const imageHtmlCachePath = path.join(
+      ScrapePaths.CACHEDIR_HTML_POKEMON,
+      `${pokemonInfo.no}_img.html`
+    );
 
     const pokemon: PokemonInfo = {
       nationalDexNo: pokemonInfo.no,
@@ -296,23 +305,15 @@ async function scrapePokemon(
               }
           ),
       },
+
+      imageData: await scrapeImage(
+        imageUrl,
+        imageHtmlCachePath,
+        imageCachePath
+      ),
     };
 
     await fs.writeFile(outCachePath, JSON.stringify(pokemon, null, 2));
-
-    /** Scrape image */
-    const imageUrl = `https://bulbapedia.bulbagarden.net/${
-      (<HTMLAnchorElement>(
-        infoTableDom?.querySelector('td[colspan="4"] img')?.parentElement
-      ))?.href
-    }`;
-
-    const imageHtmlCachePath = path.join(
-      ScrapePaths.CACHEDIR_HTML_POKEMON,
-      `${pokemonInfo.no}_img.html`
-    );
-
-    await scrapeImage(imageUrl, imageHtmlCachePath, imageCachePath);
 
     console.log(`${pokemonInfo.no} ${pokemonInfo.name} scraped`);
     return pokemon;
@@ -324,19 +325,21 @@ async function scrapePokemon(
  * @param url Image URL to scrape.
  * @param htmlCachePath Path to Image URL HTML cache file.
  * @param imageCachePath Path to Image cache file.
+ * @returns Promise that resolves with the image data as a base64-encoded string.
  */
 async function scrapeImage(
   url: string,
   htmlCachePath: string,
   imageCachePath: string
-): Promise<void> {
+): Promise<string> {
   const html = await ScrapeUtils.getPageHtml(url, htmlCachePath);
   const dom = new JSDOM(html);
   const fullUrl = `https://${dom.window.document
     .querySelector<HTMLAnchorElement>("div.fullImageLink a")
     ?.href.slice(2)}`;
 
-  await ScrapeUtils.fetchBlob(fullUrl, imageCachePath);
+  const rawImageData = await ScrapeUtils.fetchBlob(fullUrl, imageCachePath);
+  return rawImageData.toString("base64");
 }
 
 /**
