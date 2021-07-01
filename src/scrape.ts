@@ -247,7 +247,7 @@ async function scrapePokemon(
               tr.children[1].textContent?.trim() || ""
             ).replace("*", ""),
           })),
-      ],
+      ].reduce((obj, entry) => ({ ...obj, [entry.lang]: entry.value }), {}),
 
       category:
         infoTableDom.querySelector('a[title="Pokémon category"]')
@@ -374,7 +374,7 @@ async function scrapeMovesList(): Promise<BasicMoveInfo[]> {
       (rowCells) =>
         <BasicMoveInfo>{
           indexNo: parseInt(rowCells[0] || ""),
-          name: [{ lang: "en", value: rowCells[1]?.replace("*", "") }],
+          name: { en: rowCells[1]?.replace("*", "") },
           type: rowCells[2],
           category: rowCells[3],
           pp: parseInt(rowCells[5]?.replace("*", "") || ""),
@@ -474,9 +474,7 @@ async function scrapeMove(
       await fs.stat(jsonCachePath);
     }
   } catch (error) {
-    console.log(
-      `Scraping (Move) ${moveInfo.indexNo} ${moveInfo.name[0].value}...`
-    );
+    console.log(`Scraping (Move) ${moveInfo.indexNo} ${moveInfo.name.en}...`);
     const htmlCachePath = path.join(
       ScrapePaths.CACHEDIR_HTML_MOVES,
       `${moveInfo.indexNo}.html`
@@ -509,7 +507,7 @@ async function scrapeMove(
     };
     await fs.writeFile(jsonCachePath, JSON.stringify(moveData, null, 2));
 
-    console.log(`(Move) ${moveInfo.name[0].value} scraped`);
+    console.log(`(Move) ${moveInfo.name.en} scraped`);
     return moveData;
   }
 }
@@ -543,13 +541,10 @@ async function scrapeNaturesList(): Promise<Nature[]> {
         (rowCells) =>
           <Nature>{
             indexNo: parseInt(rowCells[0] || ""),
-            name: [
-              {
-                lang: "en",
-                value: rowCells[1],
-              },
-              { lang: "ja", value: rowCells[2] },
-            ],
+            name: {
+              en: rowCells[1],
+              ja: rowCells[2],
+            },
             increasedStat: rowCells[3] === "—" ? null : rowCells[3],
             decreasedStat: rowCells[4] === "—" ? null : rowCells[4],
           }
@@ -599,7 +594,7 @@ async function scrapeAbilitiesList(): Promise<Ability[]> {
         (rowCells) =>
           <Ability>{
             indexNo: parseInt(rowCells[0]) || -1,
-            name: [{ lang: "en", value: rowCells[1] }],
+            name: { en: rowCells[1] },
             description: rowCells[2],
             gen: ScrapeUtils.romanNumeralToInt(rowCells[3]),
           }

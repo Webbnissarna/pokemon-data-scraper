@@ -36,16 +36,8 @@ export interface BasicPokemonInfo {
 /**
  * Wrapper for a localized string value.
  */
-export interface LocalizedString {
-  /**
-   * Two-letter language code.
-   */
-  lang: string;
-
-  /**
-   * String value in the language specified.
-   */
-  value: string;
+export interface LocalizedStringMap {
+  [lang: string]: string;
 }
 
 /**
@@ -105,7 +97,7 @@ export interface PokemonInfo {
   /**
    * List of localized names for this Pokémon.
    */
-  name: LocalizedString[];
+  name: LocalizedStringMap;
 
   /**
    * Category (species) of this Pokémon.
@@ -155,7 +147,7 @@ export interface BasicMoveInfo {
   /**
    * List of localized names for this Move.
    */
-  name: LocalizedString[];
+  name: LocalizedStringMap;
 
   /**
    * Type of this Move.
@@ -230,7 +222,7 @@ export interface Nature {
   /**
    * List of localized names for this Nature.
    */
-  name: LocalizedString[];
+  name: LocalizedStringMap;
 
   /**
    * Name of stat that this Nature increases, or null if not applicable.
@@ -255,7 +247,7 @@ export interface Ability {
   /**
    * List of localized names for this Ability.
    */
-  name: LocalizedString[];
+  name: LocalizedStringMap;
 
   /**
    * English description of this Ability.
