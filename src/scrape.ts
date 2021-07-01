@@ -627,7 +627,7 @@ async function getUnscraped(
   const allScrapedPokemon = (
     await fs.readdir(ScrapePaths.CACHEDIR_DATA_POKEMON)
   )
-    .filter((f) => f.endsWith(".png"))
+    .filter((f) => f.endsWith(".json"))
     .map((f) => parseInt(f.slice(0, f.indexOf("."))))
     .sort((a, b) => a - b);
 
