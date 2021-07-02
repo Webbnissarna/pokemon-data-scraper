@@ -13,6 +13,7 @@ import {
   Nature,
   PokemonInfo,
   TMMove,
+  Type,
   UnscrapedPokemonAndMoves,
 } from "./types";
 
@@ -253,7 +254,7 @@ async function scrapePokemon(
         infoTableDom.querySelector('a[title="Pokémon category"]')
           ?.firstElementChild?.textContent || "",
 
-      types: [
+      types: <Type[]>[
         ...[...(<HTMLCollectionOf<HTMLElement>>infoTableDom
             ?.querySelector(
               'a[title="Type"]'

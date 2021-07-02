@@ -8,6 +8,26 @@ export type Stat =
   | "Sp. Attack"
   | "Sp. Defense";
 
+export type Type =
+  | "???"
+  | "Bug"
+  | "Dark"
+  | "Dragon"
+  | "Electric"
+  | "Fairy"
+  | "Fighting"
+  | "Fire"
+  | "Ghost"
+  | "Grass"
+  | "Ground"
+  | "Ice"
+  | "Normal"
+  | "Poison"
+  | "Psychic"
+  | "Rock"
+  | "Steel"
+  | "Water";
+
 /**
  * Object with basic/incomplete Pokémon info.
  */
@@ -107,7 +127,7 @@ export interface PokemonInfo {
   /**
    * List of Types of this Pokémon.
    */
-  types: string[];
+  types: Type[];
 
   /**
    * List of Moves for this Pokémon.
@@ -152,7 +172,7 @@ export interface BasicMoveInfo {
   /**
    * Type of this Move.
    */
-  type: string;
+  type: Type;
 
   /**
    * Category of this Move.
