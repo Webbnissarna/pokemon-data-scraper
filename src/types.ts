@@ -57,7 +57,43 @@ export interface BasicPokemonInfo {
  * Wrapper for a localized string value.
  */
 export interface LocalizedStringMap {
-  [lang: string]: string;
+  [lang: string]: string | undefined;
+  en?: string;
+  ja?: string;
+  fr?: string;
+  es?: string;
+  de?: string;
+  it?: string;
+  ko?: string;
+  zh?: string;
+  ar?: string;
+  bg?: string;
+  he?: string;
+  hi?: string;
+  li?: string;
+  pt?: string;
+  ru?: string;
+  th?: string;
+  is?: string;
+  id?: string;
+  el?: string;
+  Hungarian?: string;
+  sv?: string;
+  tr?: string;
+  Danish?: string;
+  sq?: string;
+  Croatian?: string;
+  Finnish?: string;
+  Norwegian?: string;
+  az?: string;
+  mk?: string;
+  mn?: string;
+  sr?: string;
+  uk?: string;
+  Vietnamese?: string;
+  Czech?: string;
+  Polish?: string;
+  Dutch?: string;
 }
 
 /**
