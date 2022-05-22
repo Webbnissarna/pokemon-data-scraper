@@ -22,13 +22,11 @@ import { exit } from "process";
       `Unscraped Pokémon=${unscraped.pokemon.length} Moves=${unscraped.moves.length}`
     );
 
-    await Promise.all([
-      Scrape.slowScrapeAllPokemon(unscraped.pokemon),
-      Scrape.slowScrapeAllMoves(unscraped.moves),
-      Scrape.scrapeNaturesList(),
-      Scrape.scrapeAbilitiesList(),
-      Scrape.scrapeZMovesList(),
-    ]);
+    await Scrape.slowScrapeAllPokemon(unscraped.pokemon);
+    await Scrape.slowScrapeAllMoves(unscraped.moves);
+    await Scrape.scrapeNaturesList();
+    await Scrape.scrapeAbilitiesList();
+    await Scrape.scrapeZMovesList();
 
     console.log("done!");
   } catch (error) {

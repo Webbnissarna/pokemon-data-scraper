@@ -1,6 +1,18 @@
 import fs, { promises as fsp } from "fs";
 import axios from "axios";
 
+let lastScrapeTimestamp = 0;
+
+async function waitForScrapeDelay(): Promise<void> {
+  const timestamp = Date.now();
+  const tsDiff = timestamp - lastScrapeTimestamp;
+  if (tsDiff < 1000) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+
+  lastScrapeTimestamp = Date.now();
+}
+
 export default {
   /**
    * Convert a roman numeral string (e.g. VIII) to its integer equivalent.
@@ -162,6 +174,7 @@ export default {
     try {
       return await fsp.readFile(cachePath, { encoding: "utf-8" });
     } catch (e) {
+      await waitForScrapeDelay();
       html = await axios(url).then((res) => res.data);
       await fsp.writeFile(cachePath, html);
       return html;
@@ -177,6 +190,7 @@ export default {
     try {
       await fsp.access(cachePath);
     } catch (e) {
+      await waitForScrapeDelay();
       const res = await axios({ url, method: "GET", responseType: "stream" });
       res.data.pipe(fs.createWriteStream(cachePath));
     }
