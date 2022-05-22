@@ -374,19 +374,19 @@ async function scrapeMovesList(): Promise<BasicMoveInfo[]> {
           name: [{ lang: "en", value: rowCells[1]?.replace("*", "") }],
           type: rowCells[2],
           category: rowCells[3],
-          pp: parseInt(rowCells[5]?.replace("*", "") || ""),
+          pp: parseInt(rowCells[4]?.replace("*", "") || ""),
           power:
+            rowCells[5] === "—"
+              ? -1
+              : parseInt(rowCells[5]?.replace("*", "") || ""),
+          accuracy:
             rowCells[6] === "—"
               ? -1
-              : parseInt(rowCells[6]?.replace("*", "") || ""),
-          accuracy:
-            rowCells[7] === "—"
-              ? -1
-              : parseInt(rowCells[7]?.replace("*", "").replace("%", "") || ""),
+              : parseInt(rowCells[6]?.replace("*", "").replace("%", "") || ""),
           gen: ScrapeUtils.romanNumeralToInt(
-            rowCells[8]?.replace("*", "") || ""
+            rowCells[7]?.replace("*", "") || ""
           ),
-          scrapeUrl: `${ScrapePaths.SCRAPING_BASE_URL}/${rowCells[9]}`,
+          scrapeUrl: `${ScrapePaths.SCRAPING_BASE_URL}/${rowCells[8]}`,
         }
     );
 
@@ -591,7 +591,7 @@ async function scrapeAbilitiesList(): Promise<Ability[]> {
           (td) => td.textContent?.trim() || ""
         )
       )
-      .filter((rows, i) => i > 0 && rows.length > 0 && rows[0].length > 0)
+      .filter((rows, i) => i > 0 && rows.length === 4 && rows[0].length > 0)
       .map(
         (rowCells) =>
           <Ability>{
